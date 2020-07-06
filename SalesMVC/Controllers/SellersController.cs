@@ -40,6 +40,13 @@ namespace SalesMVC.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(Seller seller)
         {
+            if (!ModelState.IsValid)
+            {
+                var departments = _departmentService.FindAll();
+                var viewModel = new SellerFormViewModel { Seller = seller, Departments = departments };
+                return View(viewModel);
+            }
+
             _sellerService.Insert(seller);
             return RedirectToAction(nameof(Index));
         }
@@ -47,7 +54,7 @@ namespace SalesMVC.Controllers
         public IActionResult Delete(int? id)
         {
             if (id == null)
-                return RedirectToAction(nameof(Error), new { message = "ID not provided"});
+                return RedirectToAction(nameof(Error), new { message = "ID not provided" });
 
             var seller = _sellerService.FindById(id.Value);
 
@@ -85,6 +92,13 @@ namespace SalesMVC.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Edit(int id, Seller seller)
         {
+            if (!ModelState.IsValid)
+            {
+                var departments = _departmentService.FindAll();
+                var viewModel = new SellerFormViewModel { Seller = seller, Departments = departments };
+                return View(viewModel);
+            }
+
             if (id != seller.Id)
                 return RedirectToAction(nameof(Error), new { message = "ID miss match" });
 
@@ -114,7 +128,7 @@ namespace SalesMVC.Controllers
 
         public IActionResult Error(string message)
         {
-            var viewModel = new ErrorViewModel { Message = message, RequestId =  Activity.Current?.Id ?? HttpContext.TraceIdentifier};
+            var viewModel = new ErrorViewModel { Message = message, RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier };
             return View(viewModel);
         }
     }
