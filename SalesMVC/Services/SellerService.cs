@@ -1,9 +1,9 @@
-﻿using SalesMVC.Models;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using SalesMVC.Services.Exceptions;
-using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using SalesMVC.Services.Exceptions;
+using SalesMVC.Models;
 
 namespace SalesMVC.Services
 {
@@ -51,9 +51,16 @@ namespace SalesMVC.Services
 
         public async Task RemoveAsync(int id)
         {
-            var seller = await _context.Seller.FindAsync(id);
-            _context.Seller.Remove(seller);
-            await _context.SaveChangesAsync();
+            try
+            {
+                var seller = await _context.Seller.FindAsync(id);
+                _context.Seller.Remove(seller);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException e)
+            {
+                throw new IntegrityException("Can't delete seller because He/She has sales");
+            }
         }
     }
 }
