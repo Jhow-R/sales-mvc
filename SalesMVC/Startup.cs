@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.EntityFrameworkCore;
+using SalesMVC.Models;
 
 namespace SalesMVC
 {
@@ -33,6 +35,10 @@ namespace SalesMVC
 
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+            services.AddDbContext<SalesMVCContext>(options =>
+                    options.UseMySql(Configuration.GetConnectionString("SalesMVCContext"), builder =>
+                        builder.MigrationsAssembly("SalesMVC")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
