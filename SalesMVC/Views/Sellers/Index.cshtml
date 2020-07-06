@@ -1,4 +1,5 @@
-﻿
+﻿@model IEnumerable<Seller>
+
 @{
     ViewData["Title"] = "Sellers";
 }
@@ -7,3 +8,30 @@
 
 <p>Sellers index page</p>
 
+<table class="table table-striped table-hover">
+    <thead class="bg-primary">
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.Name) </th>
+            <th>@Html.DisplayNameFor(model => model.Email) </th>
+            <th>@Html.DisplayNameFor(model => model.BirthDate) </th>
+            <th>@Html.DisplayNameFor(model => model.BaseSalary) </th>
+            <th> </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+        <tr>
+            <td>@Html.DisplayFor(model => item.Name)</td>
+            <td>@Html.DisplayFor(model => item.Email)</td>
+            <td>@Html.DisplayFor(model => item.BirthDate)</td>
+            <td>@Html.DisplayFor(model => item.BaseSalary)</td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>
